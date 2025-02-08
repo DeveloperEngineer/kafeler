@@ -1,48 +1,35 @@
 <?php
 
-namespace App\Models;
+    namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+    use Illuminate\Database\Eloquent\Factories\HasFactory;
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class User extends Authenticatable
-{
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    class User extends Model
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+        use HasFactory;
+
+        protected $fillable = [
+            'name',
+            'lastname',
+            'username',
+            'email',
+            'password',
         ];
+
+        protected $hidden = [
+            'password'
+        ];
+
+        protected $casts = [
+            'passwoed' => 'hashed',
+            'email_verified_at' => 'datetime',
+        ];
+
+        public function categories(): HasMany
+        {
+            return $this->hasMany(Category::class);
+        }
+
     }
-}
