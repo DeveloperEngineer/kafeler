@@ -7,3 +7,5 @@
 
     Route::get('/{cafe:username}', [WebController::class, 'show'])->name('cafe.show');
     Route::get('/{cafe:username}/{category:slug}', [WebController::class, 'categoryShow'])->name('category.show');
+
+    Route::get('/{cafe:username}/{category:slug}/{product:slug}', [WebController::class, 'productShow'])->name('product.show');

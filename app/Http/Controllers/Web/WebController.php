@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -28,16 +29,18 @@ class WebController extends Controller
         return view('web.cafe', compact('cafe'));
     }
 
-    public function categoryShow($username, $slug)
+    public function categoryShow(User $cafe, Category $category)
     {
-        $cafe = User::where('username', $username)->firstOrFail();
-        $category = $cafe->categories()->where('slug', $slug)->firstOrFail();
         $category->load('products');
-
-//        return $category->products;
 
         return view('web.category', compact('cafe', 'category'));
     }
+
+    public function productShow(User $cafe, Category $category, Product $product)
+    {
+        return view('web.product', compact('cafe', 'category', 'product'));
+    }
+
 
     /**
      * Show the form for editing the specified resource.
