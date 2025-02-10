@@ -8,8 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect('/admin');
+    }
+
     public function showLoginForm()
     {
+        if (auth()->check()) {
+            return redirect()->route('admin.dashboard');
+        }
         return view('auth.login');
     }
 
@@ -21,7 +29,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            return redirect()->route('home')->with('success', 'Giriş başarılı! Hoş geldiniz.');
+            return redirect()->route('admin.dashboard')->with('success', 'Giriş başarılı! Hoş geldiniz.');
         }
 
         return back()->withErrors([
@@ -31,13 +39,10 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
 
-//        $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-//        dd(Auth::check());
 
         return redirect()->route('login')->with('success', 'Çıkış başarılı! Görüşmek üzere.');
 

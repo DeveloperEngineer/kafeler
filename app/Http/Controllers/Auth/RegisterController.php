@@ -18,7 +18,6 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-//        return $request->all();
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
@@ -62,7 +61,6 @@ class RegisterController extends Controller
         } catch (Exception $e) {
             return back()->with('error', 'Bir hata oluştu. ');
         }
-
 
     }
 }

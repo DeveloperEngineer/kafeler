@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(auth()->check())
+        <script>window.location.href = "{{ route('admin.dashboard') }}";</script>
+    @endif
     <div class="flex items-center justify-center min-h-screen bg-gray-50">
         <div class="w-72 bg-white shadow-lg rounded-lg p-6">
             <h2 class="text-2xl font-bold text-center mb-4 text-gray-800">Giriş Yap</h2>

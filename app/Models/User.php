@@ -7,10 +7,11 @@
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\Relations\HasMany;
     use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
+    use Laravel\Sanctum\HasApiTokens;
 
     class User extends Model implements Authenticatable
     {
-        use HasFactory, AuthenticatableTrait;
+        use HasApiTokens, HasFactory, AuthenticatableTrait;
 
         protected $fillable = [
             'name',

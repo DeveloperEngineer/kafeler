@@ -11,9 +11,16 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    public function index()
+    {
+        $products = Product::with('categories')->get();
+
+        return response()->json([
+            'products' => $products
+        ]);
+    }
+
     public function productsByCategory(Category $category)
     {
         return response()->json([
@@ -21,9 +28,6 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -72,9 +76,6 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Product $product)
     {
         $validatedData = $request->validate([
@@ -101,20 +102,16 @@ class ProductController extends Controller
         $validatedData['slug'] = Str::slug($validatedData['name']);
 
         if ($request->hasFile('image')) {
-
             if ($product->image && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
 
-            if (!Storage::disk('public')->exists('products')) {
-                Storage::disk('public')->makeDirectory('products');
-            }
-
             $validatedData['image'] = $request->file('image')->store('products', 'public');
+        } elseif (!$request->filled('existing_image')) {
+            unset($validatedData['image']);
         }
 
         $product->update($validatedData);
-
         $product->categories()->sync($request->categories);
 
         return response()->json([
@@ -123,9 +120,7 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Product $product)
     {
         $product->categories()->detach();
