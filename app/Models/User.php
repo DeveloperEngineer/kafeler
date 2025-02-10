@@ -2,13 +2,15 @@
 
     namespace App\Models;
 
+    use Illuminate\Contracts\Auth\Authenticatable;
     use Illuminate\Database\Eloquent\Factories\HasFactory;
     use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Eloquent\Relations\HasMany;
+    use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
-    class User extends Model
+    class User extends Model implements Authenticatable
     {
-        use HasFactory;
+        use HasFactory, AuthenticatableTrait;
 
         protected $fillable = [
             'name',
@@ -16,10 +18,11 @@
             'username',
             'email',
             'password',
+            'email_verified_at'
         ];
 
         protected $hidden = [
-            'password'
+            'password', 'remember_token',
         ];
 
         protected $casts = [

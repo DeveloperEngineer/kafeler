@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function productsByCategory(Category $category)
     {
         return response()->json([
-            'products' => $category->products
+            'category' => $category->load('products')
         ]);
     }
 
